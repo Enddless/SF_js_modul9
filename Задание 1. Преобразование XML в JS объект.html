@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+ //сначала преобразовываем xml, затем получаем все поля и атрибуты
+ const xmlString =
+        `<list>
+            <student>
+                <name lang="en">
+                  <first>Ivan</first>
+                  <second>Ivanov</second>
+                </name>
+                <age>35</age>
+                <prof>teacher</prof>
+            </student>           
+            <student>
+                <name lang="ru">
+                  <first>Петр</first>
+                  <second>Петров</second>
+                </name>
+                <age>58</age>
+                <prof>driver</prof>
+            </student>
+        </list>
+        `;
+
+let parser = new DOMParser;
+let xmlDom = parser.parseFromString(xmlString, "text/xml" );
+let list = xmlDom.querySelector("list");
+let stydentArray = list.querySelectorAll("student");
+let context = {list: []}
+//для каждого элемента массива вызываем функцию
+stydentArray.forEach(function(element){
+    let name = element.querySelector("name");
+    let first = element.querySelector("first");
+    let second = element.querySelector("second");
+    let age = element.querySelector("age");
+    let prof = element.querySelector("prof");
+    let langAttr = name.getAttribute('lang');
+    
+    let massiv = { 
+      name: first.textContent + ' ' + second.textContent,
+      age: Number(age.textContent),
+      prof: prof.textContent,
+      lang: langAttr,
+    };
+    context.list.push(massiv);
+    
+  
+});
+console.log(context);
+    </script>
+</body>
+</html>

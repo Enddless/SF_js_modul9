@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      input {
+            background-color: #d8f3dc;
+            display: flex;
+            margin-bottom:15px;
+            width:110px;
+      }
+      button {
+            background-color: #480CA8;
+            color:aliceblue;
+            border-radius:5%;
+            width:160px;
+      }
+      .rezult {
+            display: flex;
+            flex-wrap: wrap;
+      }
+      img {
+            width:150px;
+      }
+    </style>
+</head>
+<body>
+    
+
+    <p> Отправка запроса. Введите числа от 100 до 300 и нажмите кнопку</p>
+    <input type="text" name="" class="width" value="" placeholder="Введите ширину">
+    <input type="text" name="" class="height" value="" placeholder="Введите высоту">
+    <button class="btn">Press me</button>
+   <div class="rezult"></div>   
+
+
+
+
+<script>
+  //нажатие на кнопку
+let btn = document.querySelector('button');
+let rezult = document.querySelector('.rezult');
+btn.addEventListener("click", () => {
+  let widthValue = document.querySelector('.width').value; 
+  let heightValue = document.querySelector('.height').value;
+  
+
+  
+  if ((widthValue >= 100 && widthValue <= 300) && (heightValue >= 100 && heightValue <= 300)) {
+        fetch(`https://picsum.photos/${widthValue}/${heightValue}`)
+          .then((response) => {
+          let cards = `
+                    <div>
+                    <img src="${response.url}">
+                    </div>
+                `;
+          rezult.innerHTML = cards; 
+      })
+
+      .catch(() => {
+        console.log('error') 
+      }); 
+  
+   } else {
+     console.log('Числа вне диапазона от 100 до 300');
+      
+   }
+});
+</script>
+
+</body>
+</html>

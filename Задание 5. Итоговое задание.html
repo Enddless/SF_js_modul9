@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        input {
+            background-color: #d8f3dc;
+            display: flex;
+            margin-bottom:15px;
+            width:110px;
+            border: 1px solid #52b788;
+            text-align:center;
+        }
+        .input1{
+            background-color: #b7e4c7;
+        }
+        button {
+            background-color: #95d5b2;
+            color:aliceblue;
+            border-radius:5%;
+            border: 1px solid #52b788;
+            width:110px;
+        }
+        .rezult {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        img {
+            width:250px;
+        }
+    </style>
+</head>
+<body>
+    <p>Введите числа от 1 до 10 и нажмите кнопку</p>
+    <input type="text" name="" class="input" value="" placeholder="Страница">
+    <input type="text" name="" class="input1" value="" placeholder="Лимит">
+    <button class="btn">Press me</button>
+   <div class="rezult"></div>   
+
+   <script>
+    //нажатие на кнопку
+let btn = document.querySelector('button');
+let rezult = document.querySelector('.rezult');
+
+let dataStorage = localStorage.getItem("url","data");
+  if (dataStorage){
+    picture(JSON.parse(dataStorage));
+  }
+
+function picture(data) {
+    for (item of data) {
+        let img = document.createElement('img');
+        img.setAttribute('src', item.download_url);
+        rezult.innerHTML = "";
+        setTimeout(() => {
+            rezult.append(img);
+        });
+    }
+}
+
+
+btn.addEventListener("click", () => {
+  let page = document.querySelector('.input').value; 
+  let limit = document.querySelector('.input1').value;
+
+  //проверяем числа
+  if (!(page >= 1 && page <= 10 || isNaN(page))) {
+    rezult.innerHTML = '<p>Номер страницы вне диапазона от 1 до 10</p>';
+    return;
+  } 
+  if (!(limit >= 1 && limit <= 10 || isNaN(limit))){
+    rezult.innerHTML = '<p>Лимит вне диапазона от 1 до 10</p>';
+    return;
+  } 
+  
+  if ( !(page >= 1 && page <= 10 || isNaN(page)) && !(limit >= 1 && limit <= 10 || isNaN(limit))){
+    rezult.innerHTML = '<p>Номер страницы и лимит вне диапазона от 1 до 10</p>';
+    return;
+  } 
+  
+  
+      //делаем запрос
+         fetch(`https://picsum.photos/v2/list?page=${page}&limit=${limit}`)
+          .then((response) => {
+            result = response.json();
+            return result;
+        })
+          .then((data) => {
+            picture(data);
+            localStorage.setItem('url', JSON.stringify(data));
+        })
+      .catch(() => {
+        console.log('error') 
+      }); 
+});
+
+   </script>
+</body>
+</html>

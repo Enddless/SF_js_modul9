@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        input {
+            background-color: #4CC9F0;
+            display: block;
+            margin-bottom:15px;
+        }
+        button {
+            background-color: #480CA8;
+            color:aliceblue;
+            border-radius:5%;
+            width:160px;
+        }
+        .rezult {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .card {
+            margin: 20px;
+            display:block;
+            text-align:center;
+        }
+        img {
+            width:150px;
+        }
+    </style>
+</head>
+<body>
+    <p> Отправка запроса. Введите число и нажмите кнопку</p>
+    <input type="text" name="" id="" value="3">
+    <button class="btn">Press me</button>
+    <div class="rezult"></div>   
+ 
+
+
+
+   <script>
+    //найдем поля
+        const inputValue = document.querySelector('input').value;
+        const btn = document.querySelector('button');
+        const urlString = "https://picsum.photos/v2/list?limit=";
+        const url = urlString + inputValue;
+        
+        //нажатие на кнопку
+        btn.addEventListener('click', () => {
+            //Если число не попадает в диапазон от 1 до 10 — выводить ниже текст «число вне диапазона от 1 до 10».
+            if (inputValue > 10) {
+                //console.log("Число вне диапазона от 1 до 10");
+            } else
+                //console.log("Число в диапазоне от 1 до 10");
+                sendRequest(url, display);
+        })
+
+
+        //запрос на url 
+        function sendRequest (url, callback){
+            const xhr = new XMLHttpRequest;
+            xhr.open("get", url, true);
+            //console.log(url + inputValue);
+            xhr.onload = function() {
+                if (xhr.status != 200) {
+                  console.log("Запрос не сработал");
+                } else {
+                    //обрабатываем результат ответа на запрос и вызываем функцию формирования результата
+                    console.log("Запрос сработал");
+                    const result = JSON.parse(xhr.response);
+                    //если есть второй параметр, то вызываем функцию с именем этого параметра и передаем ему аргумент с объектом ответа
+                    if (callback) {
+                        callback(result);
+                    }
+                } 
+            };
+            xhr.send();
+        }
+
+        const rezultBlock = document.querySelector('.rezult');
+
+        //вывод результата на дисплей
+        function display(pictureData){
+        let cards = '';
+
+        pictureData.forEach(item => {
+            const cardBlock = `
+            <div class="card">
+                <img
+                src="${item.download_url}"
+                />
+                <p>${item.author}</p>
+            </div>
+            `;
+            cards = cards + cardBlock;
+        });
+        rezultBlock.innerHTML = cards;
+        }
+
+
+
+   </script>
+</body>
+</html>
